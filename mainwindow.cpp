@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     qDebug() << "=TEST";
     refreshImage();
-    ui->image->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored );
+    ui->image->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
 }
 
 MainWindow::~MainWindow()
@@ -39,8 +39,7 @@ void MainWindow::replyFinished(QNetworkReply* reply)
 {
     QByteArray imageByteArray = reply->readAll();
     QImage image = QImage::fromData(imageByteArray);
-    ui->image->setPixmap(QPixmap::fromImage(image));
-    qDebug() << "Image Refreshed";
+    ui->image->setImage(image);
 }
 
 bool MainWindow::event(QEvent *event)
