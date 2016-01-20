@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 
 #include <QDebug>
+#include <QKeyEvent>
 #include <QtNetwork/QNetworkReply>
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -39,4 +40,19 @@ void MainWindow::replyFinished(QNetworkReply* reply)
     QByteArray imageByteArray = reply->readAll();
     QImage image = QImage::fromData(imageByteArray);
     ui->image->setPixmap(QPixmap::fromImage(image));
+    qDebug() << "Image Refreshed";
+}
+
+bool MainWindow::event(QEvent *event)
+{
+    if (event->type() == QEvent::KeyPress)
+    {
+        QKeyEvent *ke = static_cast<QKeyEvent *>(event);
+        if (ke->key() == Qt::Key_F5)
+        {
+            refreshImage();
+            return true;
+        }
+    }
+    return QMainWindow::event(event);
 }

@@ -17,6 +17,9 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+protected:
+    bool event(QEvent* event) override;
+
 private Q_SLOTS:
     void refreshImage();
     void replyFinished(QNetworkReply* reply);
