@@ -52,6 +52,17 @@ bool MainWindow::event(QEvent *event)
             refreshImage();
             return true;
         }
+        else if (ke->key() == Qt::Key_F)
+        {
+            if (windowState()!= Qt::WindowFullScreen)
+            {
+                setWindowState(Qt::WindowFullScreen);
+            }
+            else
+            {
+                setWindowState(Qt::WindowNoState);
+            }
+        }
     }
     return QMainWindow::event(event);
 }
