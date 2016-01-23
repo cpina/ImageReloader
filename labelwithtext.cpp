@@ -17,17 +17,44 @@ QRect LabelWithText::textRectangle()
     return QRect(440, 0, 640-440, 11);
 }
 
+void LabelWithText::showText(QPainter& painter, const QString &text)
+{
+    painter.setPen(Qt::black);
+
+    QPair<float, float> ratios = getRatios();
+
+    QRect rect(QPoint(440*ratios.first, 10*ratios.second), QPoint(640*ratios.first, 25*ratios.second));
+    painter.fillRect(rect, QBrush(Qt::SolidPattern));
+
+    painter.setPen(Qt::yellow);
+    QFont font;
+    font.setFamily("Monospaced");
+    font.setBold(true);
+    painter.setFont(font);
+
+    rect.setBottom(rect.bottom()-2);
+    painter.drawText(rect.bottomLeft(), text);
+}
+
 void LabelWithText::setImage(const QImage &image)
 {
     m_text = image.copy(textRectangle());
 
     // Changed scaled if we don't want to magnify the text
-    m_text = m_text.scaled(m_text.size() * 2);
+    m_text = m_text.scaled(m_text.size() * 1);
 
     setPixmap(QPixmap::fromImage(image));
     m_refreshed = QDateTime::currentDateTimeUtc();
 
     QTimer::singleShot(OSD_TIMEOUT, this, SLOT(update()));
+}
+
+QPair<float, float> LabelWithText::getRatios() const
+{
+    float ratioX = float(width()) / pixmap()->width();
+    float ratioY = float(height()) / pixmap()->height();
+
+    return QPair<float, float>(ratioX, ratioY);
 }
 
 void LabelWithText::paintEvent(QPaintEvent* event)
@@ -37,10 +64,9 @@ void LabelWithText::paintEvent(QPaintEvent* event)
 
     if (pixmap())
     {
-        float ratioX = float(width()) / pixmap()->width();
-        float ratioY = float(height()) / pixmap()->height();
+        QPair<float,float> ratios = getRatios();
 
-        if (ratioX < 0.8 || ratioY < 0.8)
+        if (ratios.first < 0.8 || ratios.second < 0.8)
         {
             painter.drawImage(width()-m_text.width(), 0, m_text);
         }
@@ -56,8 +82,6 @@ void LabelWithText::paintEvent(QPaintEvent* event)
 
         qreal angle = line.angle();
 
-        // angle = qAbs(angle);
-
         if (angle > 270)
         {
             angle-= 360;
@@ -69,16 +93,14 @@ void LabelWithText::paintEvent(QPaintEvent* event)
 
         angle = qAbs(angle);
 
-        QString angleText = QString::fromUtf8("%1°").arg(angle);
+        QString angleText = QString::fromUtf8("%1°").arg(QString::number(angle,'f',2));
 
-        painter.setPen(QPen(Qt::black));
-        painter.drawText(10,100, angleText);
+        showText(painter, angleText);
     }
 
     if ((m_refreshed.msecsTo(QDateTime::currentDateTimeUtc())) < OSD_TIMEOUT)
     {
-        painter.setPen(QPen(Qt::black));
-        painter.drawText(10,100, tr("Just refreshed"));
+        showText(painter, tr("Just refreshed"));
     }
 }
 

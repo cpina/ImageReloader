@@ -22,6 +22,8 @@ public slots:
 
 private:
     static QRect textRectangle();
+    void showText(QPainter &painter, const QString& text);
+    QPair<float, float> getRatios() const;
 
     QPoint m_startsLine;
     QPoint m_endsLine;
