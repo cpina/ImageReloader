@@ -13,6 +13,7 @@ public:
 
 protected:
     void paintEvent(QPaintEvent* event) override;
+    bool event(QEvent* event) override;
 
 signals:
 
@@ -20,6 +21,9 @@ public slots:
 
 private:
     static QRect textRectangle();
+
+    QPoint m_startsLine;
+    QPoint m_endsLine;
 
     QImage m_text;
 };
