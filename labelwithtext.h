@@ -2,6 +2,7 @@
 #define LABELWITHTEXT_H
 
 #include <QLabel>
+#include <QDateTime>
 
 class LabelWithText : public QLabel
 {
@@ -24,6 +25,8 @@ private:
 
     QPoint m_startsLine;
     QPoint m_endsLine;
+
+    QDateTime m_refreshed;
 
     QImage m_text;
 };

@@ -3,6 +3,9 @@
 #include <QDebug>
 #include <QPainter>
 #include <QMouseEvent>
+#include <QTimer>
+
+int OSD_TIMEOUT = 5000;
 
 LabelWithText::LabelWithText(QWidget *parent) :
     QLabel(parent)
@@ -22,6 +25,9 @@ void LabelWithText::setImage(const QImage &image)
     m_text = m_text.scaled(m_text.size() * 2);
 
     setPixmap(QPixmap::fromImage(image));
+    m_refreshed = QDateTime::currentDateTimeUtc();
+
+    QTimer::singleShot(OSD_TIMEOUT, this, SLOT(update()));
 }
 
 void LabelWithText::paintEvent(QPaintEvent* event)
@@ -33,8 +39,6 @@ void LabelWithText::paintEvent(QPaintEvent* event)
     {
         float ratioX = float(width()) / pixmap()->width();
         float ratioY = float(height()) / pixmap()->height();
-
-        qDebug() << ratioX << ratioY;
 
         if (ratioX < 0.8 || ratioY < 0.8)
         {
@@ -69,6 +73,12 @@ void LabelWithText::paintEvent(QPaintEvent* event)
 
         painter.setPen(QPen(Qt::black));
         painter.drawText(10,100, angleText);
+    }
+
+    if ((m_refreshed.msecsTo(QDateTime::currentDateTimeUtc())) < OSD_TIMEOUT)
+    {
+        painter.setPen(QPen(Qt::black));
+        painter.drawText(10,100, tr("Just refreshed"));
     }
 }
 
