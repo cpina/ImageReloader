@@ -51,6 +51,10 @@ void LabelWithText::setImage(const QImage &image)
 
 QPair<float, float> LabelWithText::getRatios() const
 {
+    if (!pixmap())
+    {
+        return QPair<float,float>(1,1);
+    }
     float ratioX = float(width()) / pixmap()->width();
     float ratioY = float(height()) / pixmap()->height();
 
