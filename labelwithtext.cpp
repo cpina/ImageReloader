@@ -46,7 +46,7 @@ void LabelWithText::setImage(const QImage &image)
     setPixmap(QPixmap::fromImage(image));
     m_refreshed = QDateTime::currentDateTimeUtc();
 
-    QTimer::singleShot(OSD_TIMEOUT, this, SLOT(update()));
+    QTimer::singleShot(OSD_TIMEOUT, this, SLOT(repaint()));
 }
 
 QPair<float, float> LabelWithText::getRatios() const
