@@ -13,7 +13,6 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(replyFinished(QNetworkReply*)));
 
     m_timer.setInterval(2*60*1000);
-    // m_timer.setInterval(2000);
     m_timer.start();
 
     connect(&m_timer, SIGNAL(timeout()),
@@ -39,7 +38,6 @@ void MainWindow::replyFinished(QNetworkReply* reply)
     QByteArray imageByteArray = reply->readAll();
     QImage image = QImage::fromData(imageByteArray);
     ui->image->setImage(image);
-    qDebug() << "Size now:" << size();
 }
 
 bool MainWindow::event(QEvent *event)

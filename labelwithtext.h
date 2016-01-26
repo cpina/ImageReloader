@@ -25,7 +25,8 @@ public slots:
 private:
     static QRect textRectangle();
     void showText(QPainter &painter, const QString& text);
-
+    qreal calculateAngle(const QLineF& line);
+    QPointF screenToImage(const QPointF& screenPoint);
     QPoint m_startsLine;
     QPoint m_endsLine;
 

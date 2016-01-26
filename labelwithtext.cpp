@@ -36,6 +36,39 @@ void LabelWithText::showText(QPainter& painter, const QString &text)
     painter.drawText(rect.bottomLeft(), text);
 }
 
+qreal LabelWithText::calculateAngle(const QLineF& line)
+{
+    QLineF lineImage(line);
+
+    lineImage.setP1(screenToImage(line.p1()));
+    lineImage.setP2(screenToImage(line.p2()));
+
+    qreal angle = lineImage.angle();
+    if (angle > 270)
+    {
+        angle-= 360;
+    }
+    else if(angle > 90)
+    {
+        angle-=180;
+    }
+
+    angle = qAbs(angle);
+
+    return angle;
+}
+
+QPointF LabelWithText::screenToImage(const QPointF& screenPoint)
+{
+    QPointF imagePoint;
+    QPair<float,float> ratios = getRatios();
+
+    imagePoint.setX(screenPoint.x()/ratios.first);
+    imagePoint.setY(screenPoint.y()/ratios.second);
+
+    return imagePoint;
+}
+
 void LabelWithText::setImage(const QImage &image)
 {
     m_text = image.copy(textRectangle());
@@ -89,18 +122,7 @@ void LabelWithText::paintEvent(QPaintEvent* event)
 
         painter.drawLine(line);
 
-        qreal angle = line.angle();
-
-        if (angle > 270)
-        {
-            angle-= 360;
-        }
-        else if(angle > 90)
-        {
-            angle-=180;
-        }
-
-        angle = qAbs(angle);
+        qreal angle = calculateAngle(line);
 
         QString angleText = QString::fromUtf8("%1°").arg(QString::number(angle,'f',2));
 
