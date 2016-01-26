@@ -20,7 +20,6 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(refreshImage()));
 
     ui->setupUi(this);
-    qDebug() << "=TEST";
     refreshImage();
     ui->image->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
 }
@@ -40,6 +39,7 @@ void MainWindow::replyFinished(QNetworkReply* reply)
     QByteArray imageByteArray = reply->readAll();
     QImage image = QImage::fromData(imageByteArray);
     ui->image->setImage(image);
+    qDebug() << "Size now:" << size();
 }
 
 bool MainWindow::event(QEvent *event)
@@ -62,6 +62,20 @@ bool MainWindow::event(QEvent *event)
             {
                 setWindowState(Qt::WindowNoState);
             }
+        }
+        else if (ke->key() == Qt::Key_X)
+        {
+            resize(ui->image->image().size());
+        }
+        else if (ke->key() == Qt::Key_1)
+        {
+            QPair<float,float> ratios = ui->image->getRatios();
+
+            QSize currentSize = size();
+
+            currentSize.setHeight(ui->image->image().size().height() * ratios.first);
+
+            resize(currentSize);
         }
     }
     return QMainWindow::event(event);

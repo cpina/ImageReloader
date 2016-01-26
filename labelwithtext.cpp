@@ -49,6 +49,11 @@ void LabelWithText::setImage(const QImage &image)
     QTimer::singleShot(OSD_TIMEOUT, this, SLOT(repaint()));
 }
 
+QImage LabelWithText::image() const
+{
+    return pixmap()->toImage();
+}
+
 QPair<float, float> LabelWithText::getRatios() const
 {
     if (!pixmap())
