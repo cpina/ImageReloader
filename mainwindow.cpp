@@ -45,10 +45,9 @@ bool MainWindow::event(QEvent *event)
     if (event->type() == QEvent::KeyPress)
     {
         QKeyEvent *ke = static_cast<QKeyEvent *>(event);
-        if (ke->key() == Qt::Key_F5)
+        if (ke->key() == Qt::Key_F5 ||(ke->key() == Qt::Key_R && ke->modifiers() & Qt::ControlModifier))
         {
             refreshImage();
-            return true;
         }
         else if (ke->key() == Qt::Key_F)
         {
@@ -74,6 +73,10 @@ bool MainWindow::event(QEvent *event)
             currentSize.setHeight(ui->image->image().size().height() * ratios.first);
 
             resize(currentSize);
+        }
+        else if (ke->key() == Qt::Key_W && (ke->modifiers() & Qt::ControlModifier))
+        {
+            close();
         }
     }
     return QMainWindow::event(event);

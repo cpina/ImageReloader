@@ -114,6 +114,11 @@ void LabelWithText::paintEvent(QPaintEvent* event)
         }
     }
 
+    if ((m_refreshed.msecsTo(QDateTime::currentDateTimeUtc())) < OSD_TIMEOUT)
+    {
+        showText(painter, tr("Just refreshed"));
+    }
+
     if (!m_startsLine.isNull() && !m_endsLine.isNull())
     {
         painter.setPen(QPen(Qt::yellow));
@@ -127,11 +132,6 @@ void LabelWithText::paintEvent(QPaintEvent* event)
         QString angleText = QString::fromUtf8("%1°").arg(QString::number(angle,'f',2));
 
         showText(painter, angleText);
-    }
-
-    if ((m_refreshed.msecsTo(QDateTime::currentDateTimeUtc())) < OSD_TIMEOUT)
-    {
-        showText(painter, tr("Just refreshed"));
     }
 }
 
